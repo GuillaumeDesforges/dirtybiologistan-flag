@@ -1,13 +1,14 @@
-import { writeFileSync } from "fs";
 import moment from "moment";
 import path from "path";
+import { Config } from "./config.js";
 import { log } from "./log.js";
 import { fetchFlag } from "./source.js";
+import { storeToBucketFile } from "./target.js";
 
 const SNAPSHOTS_DIRNAME = "snapshots";
 
 // save a snapshot of the current state of the flag
-export async function doJob() {
+export async function doJob(config: Config) {
   const jobStartTime = moment.utc();
   log("Job started at " + jobStartTime.toISOString());
 
@@ -23,7 +24,11 @@ export async function doJob() {
     );
 
     try {
-      writeFileSync(snapshotPath, JSON.stringify(snapshotData));
+      await storeToBucketFile(
+        config.bucket,
+        snapshotPath,
+        JSON.stringify(snapshotData)
+      );
       log("Successfully written snapshot to file " + snapshotPath);
     } catch (e: any) {
       const error: Error = e; // cast

@@ -4,9 +4,12 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node build/index.js"
+    "start": "yarn build && node build/index.js",
+    "test": "yarn build && node build/test.js"
   },
   "dependencies": {
+    "@google-cloud/storage": "5.15.4",
+    "dotenv": "10.0.0",
     "moment": "2.29.1",
     "node-fetch": "3.0.0"
   },
